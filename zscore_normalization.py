@@ -3,10 +3,11 @@ from functools import reduce
 
 
 def get_z_score(records):
+    length = len(records)
     # Calculate mean
-    m = sum(records)/len(records)
+    m = sum(records)/length
     # Calculate standard deviation
-    std_dev = (reduce(lambda x, y: x + ((y - m) ** 2), records, 0) / len(records)) ** 0.5
+    std_dev = (reduce(lambda x, y: x + ((y - m) ** 2), records, 0) / length) ** 0.5
     # Calculate Z score
     z = map(lambda x: (x - m) / std_dev, records)
     return z
