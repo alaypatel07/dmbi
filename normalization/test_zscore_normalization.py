@@ -1,5 +1,7 @@
 import unittest
-from  zscore_normalization import get_z_score
+
+from  normalization.zscore_normalization import get_z_score
+
 
 class TestZNormalization(unittest.TestCase):
 
