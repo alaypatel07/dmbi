@@ -14,7 +14,7 @@ def get_z_score(records):
 
 
 if __name__ == '__main__':
-    with open("Data.csv") as csvfile:
+    with open("../SampleData.csv") as csvfile:
         data_iter = csv.DictReader(csvfile, delimiter=',', quotechar='"')
         try:
             data = [row for row in data_iter]
