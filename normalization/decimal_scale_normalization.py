@@ -12,3 +12,14 @@ from typing import Sequence, Union
 
 def get_range(records: Sequence[float]) -> Union[float, float]:
     return float(min(records)), float(max(records))
+
+
+def get_scaling_power(range: Union[float, float]) -> int:
+    min, max = int(abs(range[0])), int(abs(range[1]))
+    c = len(str(max)) + 1 if max > min else len(str(min)) + 1
+    return c
+
+
+def decimal_scale(records: Sequence[float]) -> Sequence[float]:
+    c = get_scaling_power(get_range(records=records))
+    return map(lambda x: x/ (10 ** c), records)
