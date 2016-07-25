@@ -7,7 +7,7 @@
 # normalize by decimal scaling we will divide each value by 1,000 (c = 3). In this case, −500 becomes
 # −0.5 while 45 will become 0.045.
 
-from typing import Sequence, Union
+from typing import Sequence, Union, Iterable
 
 
 def get_range(records: Sequence[float]) -> Union[float, float]:
@@ -20,6 +20,6 @@ def get_scaling_power(range: Union[float, float]) -> int:
     return c
 
 
-def decimal_scale(records: Sequence[float]) -> Sequence[float]:
+def decimal_scale(records: Sequence[float]) -> Iterable[float]:
     c = get_scaling_power(get_range(records=records))
     return map(lambda x: x/ (10 ** c), records)
