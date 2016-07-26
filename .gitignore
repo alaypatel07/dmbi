@@ -138,3 +138,5 @@ ENV/
 /Data.csv
 /normalization/NormalizedData.csv
 /normalization/ZNormalizedData.csv
+/print/
+/normalization/DecimalScaleNormalizedData.csv
