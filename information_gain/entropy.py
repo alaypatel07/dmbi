@@ -23,10 +23,24 @@ class Node(object):
 
     def get_confidence(self, outcome):
         values = get_attribute_values(self.data, self.attribute)
-        value_outcomes = {}
+        outcomes = get_attribute_values(self.data, outcome)
+        value_set = []
         for value in values:
+            temp = {"no_of_occurances": values[value]}
+            for out in outcomes:
+                temp.setdefault(out, 0)
+            value_set.append({value:temp})
+        for index, value in enumerate(value_set):
+            for row in self.data:
+                if row[self.attribute] == list(value.keys())[0]:
+                    value[list(value.keys())[0]][row[outcome]] += 1
 
-
+        for value in value_set:
+            for v in value:
+                for out in outcomes:
+                    value[v][out] = value[v][out]/value[v]["no_of_occurances"]
+            del value[v]["no_of_occurances"]
+        return value_set
 
 if __name__ == '__main__':
     file_name = "dataset.csv"
@@ -35,3 +49,5 @@ if __name__ == '__main__':
     total_outcomes = sum(outcomes.values())
     for outcome in outcomes:
         print(get_entropy(outcomes[outcome], total_outcomes))
+    n = Node("District", data)
+    n.get_confidence("Outcome")
