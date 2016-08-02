@@ -12,6 +12,12 @@ class Extractor(object):
             data_iter = DictReader(csv_file)
             self._data = [row for row in data_iter]
 
+    def get_column(self, column_name):
+        try:
+            return [row[column_name] for row in self._data]
+        except KeyError as e:
+            raise KeyError()
+
     def __getitem__(self, item):
         return self._data[item]
 
