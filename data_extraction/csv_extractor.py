@@ -8,12 +8,12 @@ class Extractor(object):
 
     def __init__(self, filepath):
         self.file = filepath
-
-    def get_column(self, column_name, type_conversion=None):
         with open(self.file, "r") as csv_file:
-            data_iter = DictReader(column_name)
-            if type_conversion is None:
-                data = [row[column_name] for row in data_iter]
-            else:
-                data = [type_conversion(row[column_name]) for row in data_iter]
-            return data
+            data_iter = DictReader(csv_file)
+            self._data = [row for row in data_iter]
+
+    def __getitem__(self, item):
+        return self._data[item]
+
+    def __len__(self):
+        return len(self._data)
