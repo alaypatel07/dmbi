@@ -17,12 +17,12 @@ def get_attribute_values(data, attribute):
 
 
 def filter_by_confidence(outcome_dict):
-    print(outcome_dict)
+    # print(outcome_dict)
     for value in outcome_dict:
         # print(value)
         for outcome in outcome_dict[value]:
-            print(outcome_dict[value][outcome])
-            if outcome_dict[value][outcome] != 0.0 or outcome_dict[value][outcome] != 1.0:
+            # print(outcome_dict[value][outcome])
+            if outcome_dict[value][outcome] != 0.0 and outcome_dict[value][outcome] != 1.0:
                 return outcome_dict
         return False
 
