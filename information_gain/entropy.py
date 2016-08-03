@@ -16,20 +16,40 @@ def get_attribute_values(data, attribute):
     return values
 
 
+def filter_by_confidence(outcome_dict):
+    print(outcome_dict)
+    for value in outcome_dict:
+        # print(value)
+        for outcome in outcome_dict[value]:
+            print(outcome_dict[value][outcome])
+            if outcome_dict[value][outcome] != 0.0 or outcome_dict[value][outcome] != 1.0:
+                return outcome_dict
+        return False
+
+
 class Node(object):
-    def __init__(self, attribute, data):
+    def __init__(self, name, attribute, data):
+        self.name = name
         self.attribute = attribute
         self.data = data
+        self.values = get_attribute_values(data, attribute)
+        self.children = []
+        self.parent = None
+
+    def get_children(self, value_set):
+        children = filter(filter_by_confidence, value_set)
+        for child in children:
+            print(child)
 
     def get_confidence(self, outcome):
-        values = get_attribute_values(self.data, self.attribute)
+        self.values = get_attribute_values(self.data, self.attribute)
         outcomes = get_attribute_values(self.data, outcome)
         value_set = []
-        for value in values:
-            temp = {"no_of_occurances": values[value]}
+        for value in self.values:
+            temp = {"no_of_occurrences": self.values[value]}
             for out in outcomes:
                 temp.setdefault(out, 0)
-            value_set.append({value:temp})
+            value_set.append({value: temp})
         for index, value in enumerate(value_set):
             for row in self.data:
                 if row[self.attribute] == list(value.keys())[0]:
@@ -38,9 +58,15 @@ class Node(object):
         for value in value_set:
             for v in value:
                 for out in outcomes:
-                    value[v][out] = value[v][out]/value[v]["no_of_occurances"]
-            del value[v]["no_of_occurances"]
+                    value[v][out] = value[v][out] / value[v]["no_of_occurrences"]
+                del value[v]["no_of_occurrences"]
         return value_set
+
+
+class DecisionTree(object):
+    def __init__(self):
+        self.root = None
+
 
 if __name__ == '__main__':
     file_name = "dataset.csv"
@@ -49,5 +75,6 @@ if __name__ == '__main__':
     total_outcomes = sum(outcomes.values())
     for outcome in outcomes:
         print(get_entropy(outcomes[outcome], total_outcomes))
-    n = Node("District", data)
-    n.get_confidence("Outcome")
+    n = Node("root", "District", data)
+    value_set = n.get_confidence("Outcome")
+    n.get_children(value_set)
