@@ -33,7 +33,7 @@ def filter_by_confidence(outcome_dict):
 
 
 class Node(object):
-    def __init__(self, name, attribute, data, outcome):
+    def __init__(self, name, data, outcome, attribute=None):
         self.name = name
         self.attribute = attribute
         self.data = data
@@ -47,8 +47,13 @@ class Node(object):
         outcome_dict = dict(zip(outcomes, [[]] * len(outcomes)))
         for row in self.data:
             outcome_dict[row[self.attribute]].append(row)
-        print(outcome_dict)
+        # print(outcome_dict)
         return outcome_dict
+
+    def populate_children(self):
+        segregated_values = self.segregate_attribute_values()
+        for value in segregated_values:
+            self.children.append(Node(value, data=segregated_values[value], outcome=self.outcome))
 
     def get_children(self, value_set):
         children = filter(filter_by_confidence, value_set)
@@ -90,7 +95,7 @@ if __name__ == '__main__':
     total_outcomes = sum(outcomes.values())
     for outcome in outcomes:
         print(get_entropy(outcomes[outcome], total_outcomes))
-    n = Node("root", "District", data, "Outcome")
+    n = Node("root", data, "Outcome", attribute="District")
     value_set = n.get_confidence("Outcome")
     n.get_children(value_set)
     n.segregate_attribute_values()
