@@ -8,6 +8,11 @@ def get_entropy(favourable_outcomes, total_outcomes):
     return - pi * log(pi, 2)
 
 
+def get_outcomes(data, outcome, compare=None):
+    if compare is None:
+        pass
+
+
 def get_attribute_values(data, attribute):
     value_set = set(data.get_column(attribute))
     values = dict(zip(value_set, [0] * len(value_set)))
@@ -28,18 +33,28 @@ def filter_by_confidence(outcome_dict):
 
 
 class Node(object):
-    def __init__(self, name, attribute, data):
+    def __init__(self, name, attribute, data, outcome):
         self.name = name
         self.attribute = attribute
         self.data = data
         self.values = get_attribute_values(data, attribute)
         self.children = []
+        self.outcome = outcome
         self.parent = None
+
+    def segregate_attribute_values(self):
+        outcomes = list(set(data.get_column(self.attribute)))
+        outcome_dict = dict(zip(outcomes, [[]] * len(outcomes)))
+        for row in self.data:
+            outcome_dict[row[self.attribute]].append(row)
+        print(outcome_dict)
+        return outcome_dict
 
     def get_children(self, value_set):
         children = filter(filter_by_confidence, value_set)
         for child in children:
             print(child)
+        print(self.values)
 
     def get_confidence(self, outcome):
         self.values = get_attribute_values(self.data, self.attribute)
@@ -75,6 +90,7 @@ if __name__ == '__main__':
     total_outcomes = sum(outcomes.values())
     for outcome in outcomes:
         print(get_entropy(outcomes[outcome], total_outcomes))
-    n = Node("root", "District", data)
+    n = Node("root", "District", data, "Outcome")
     value_set = n.get_confidence("Outcome")
     n.get_children(value_set)
+    n.segregate_attribute_values()
