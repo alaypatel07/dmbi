@@ -1,6 +1,6 @@
 # Algorithm
 #     Develop a data structure for the node
-#         Each node has the following paramaters
+#         Each node has the following parameters
 #             Name
 #             data
 #             attribute - optional
@@ -11,3 +11,14 @@
 #     for every value for the selected attribute, check for confidence
 #         if confidence for all values is 0 except 1, stop further proliferatoin
 #         else, pick the node with least entropy, repeat
+
+
+class Data(object):
+    def __init__(self, data):
+        self.iterator = iter(data)
+
+    def __next__(self):
+        return next(self.iterator)
+
+    def __iter__(self):
+        return self.iterator
