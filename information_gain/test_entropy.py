@@ -16,3 +16,10 @@ class TestEntropy(TestCase):
             for datum, out in zip(data, output):
                 self.assertEqual(datum, out)
 
+    def test_get_column(self):
+        column_name = "foo"
+        test_case = Extractor("../data_extraction/test_data.csv")
+        expected_output = [str(1), str(4), str(7)]
+        d = Data(test_case)
+        out = d.get_column(column_name)
+        self.assertListEqual(expected_output, out)
