@@ -22,3 +22,12 @@ class Data(object):
 
     def __iter__(self):
         return self.iterator
+
+class Node(object):
+    def __init__(self, name, data, attribute=None):
+        self.name = name
+        self.data = data
+        self.attribute = attribute
+        self.children = []
+        self.flag = False
+        self.values = {}
