@@ -23,6 +23,13 @@ class Data(object):
     def __iter__(self):
         return self.iterator
 
+    def get_column(self, column):
+        try:
+            return [row[column] for row in self.iterator]
+        except KeyError:
+            raise KeyError
+
+
 class Node(object):
     def __init__(self, name, data, attribute=None):
         self.name = name
