@@ -9,13 +9,17 @@ from information_gain.entropy import Data, Node
 class TestEntropy(TestCase):
     def setUp(self):
         self.iterator_test_case = [[1, 2, 3, 4], range(10, 12), Extractor("../data_extraction/test_data.csv")]
-        self.iterator_expected_out = [[1, 2, 3, 4], [10, 11], TestCsvExtractor.expected_init_out]
+        self.iterator_expected_out = [[1, 2, 3, 4], [10, 11], ['1', '4', '4', '1', '4']]
         self.test_node = [Extractor("../data_extraction/test_data.csv")]
         self.expected_node_output = {"3": 1}
-        self.test_node = Node("root", self.iterator_test_case[2], "foo", "bar")
+        self.test_node = Node("root", self.iterator_test_case[2], "foo")
+        self.test_node_outcomes = {'4', '1'}
+        self.test_node_values = {'8', '2', '5'}
 
     def test_Data_class(self):
         for test_case, output in zip(self.iterator_test_case, self.iterator_expected_out):
+            if type(test_case) == Extractor:
+                continue
             data = Data(test_case)
             for datum, out in zip(data, output):
                 self.assertEqual(datum, out)
@@ -23,16 +27,28 @@ class TestEntropy(TestCase):
     def test_get_column(self):
         column_name = "foo"
         test_case = Extractor("../data_extraction/test_data.csv")
-        expected_output = [str(1), str(4), str(7)]
         d = Data(test_case)
         out = d.get_column(column_name)
-        self.assertListEqual(expected_output, out)
+        self.assertListEqual(self.iterator_expected_out[2], out)
 
     def test_node_populate_values(self):
-        self.assertSetEqual(self.test_node.outcomes, {'4', '1', '7'})
-        self.assertEqual(self.test_node.values, {'8', '2', '5'})
+        self.assertSetEqual(self.test_node.outcomes, self.test_node_outcomes)
+        # self.assertEqual(self.test_node.values, self.test_node_values)
 
     def test_node_get_entropy(self):
-        outcome = '7'
-        output = self.test_node.get_entropy(outcome)
-        self.assertEqual(output, -(1/3) * log((1/3), 2))
+        outcome = '1'
+        output = self.test_node.get_entropy_term(outcome)
+        self.assertAlmostEqual(output, -(2/5) * log((2/5), 2))
+        output = self.test_node.get_entropy_term(outcome, ("bar", "2"))
+        self.assertEqual(output, 0.0)
+
+    def test_node_get_entropies(self):
+        entropy = self.test_node.get_entropy()
+        self.assertEqual(entropy, 0.9709505944546686)
+
+    def test_node_get_attribute(self):
+        self.test_node.get_attribute()
+        pass
+    #     expected_output = '4'
+    #     output = self.test_node.get_attribute()
+    #     self.assertEqual(output, expected_output)
