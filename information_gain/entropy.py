@@ -41,11 +41,12 @@ class Node(object):
         self.attribute = attribute
         self.children = []
         self.flag = False
-        self.values = self.populate_values(attribute)
+        self.values = self.get_values(attribute)
         self.outcome_column = outcome_column
-        self.outcomes = self.populate_values(outcome_column)
+        self.outcomes = self.get_values(outcome_column)
+        self.entropies = self.get_entropies()
 
-    def populate_values(self, attribute):
+    def get_values(self, attribute):
         if attribute is None:
             return None
         else:
@@ -57,3 +58,9 @@ class Node(object):
         favourable_cases = len([row for row in self.data if row[self.outcome_column] == outcome])
         pi = favourable_cases / total_cases
         return -(pi * log(pi, 2))
+
+    def get_entropies(self):
+        entropies = {}
+        for outcome in self.outcomes:
+            entropies.setdefault(outcome, self.get_entropy(outcome))
+        return entropies
