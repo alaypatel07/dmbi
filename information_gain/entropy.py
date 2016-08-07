@@ -97,3 +97,9 @@ class Node(object):
                 print(p, e)
             entropies[attribute] = entropy
         return entropies
+
+    def get_information_gain(self):
+        information_gain = {}
+        for attribute in self.entrpies:
+            information_gain[attribute] = self.overall_entropy - self.entrpies[attribute]
+        return information_gain
