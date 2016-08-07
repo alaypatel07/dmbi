@@ -50,10 +50,9 @@ class Node(object):
         self.outcome_column = outcome_column
         self.outcomes = self.get_values(outcome_column)
         self.overall_entropy = self.get_entropy()
-        self.entrpies = self.get_entropy()
+        self.entropy = self.get_entropy()
+        self.entropies = self.get_entropies()
         self.information_gain = self.get_information_gain()
-        # self.attribute = self.get_attribute()
-        # self.values = self.get_values(self.attribute)
 
     def get_values(self, attribute):
         if attribute is None:
@@ -73,14 +72,12 @@ class Node(object):
         pi = favourable_cases / total_cases
         if pi == 0.0:
             return HIGHEST
-        r = abs(pi * log(pi, 2))
-        # print(attribute, favourable_cases, total_cases, r)
-        return r
+        return abs(pi * log(pi, 2))
 
     def get_entropy(self):
         return sum([self.get_entropy_term(outcome)for outcome in self.outcomes])
 
-    def get_attribute(self):
+    def get_entropies(self):
         data = Data([row.copy() for row in list(self.data)])
         for row in data:
             row.pop(self.outcome_column)
@@ -94,12 +91,11 @@ class Node(object):
                 p = values.count(value) / len(self.data)
                 e = self.get_entropy_term(self.outcome, (attribute, value))
                 entropy += p * e
-                print(p, e)
             entropies[attribute] = entropy
         return entropies
 
     def get_information_gain(self):
         information_gain = {}
-        for attribute in self.entrpies:
-            information_gain[attribute] = self.overall_entropy - self.entrpies[attribute]
+        for attribute in self.entropies:
+            information_gain[attribute] = self.overall_entropy - self.entropies[attribute]
         return information_gain

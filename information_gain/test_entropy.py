@@ -47,8 +47,11 @@ class TestEntropy(TestCase):
         self.assertEqual(entropy, 0.9709505944546686)
 
     def test_node_get_attribute(self):
-        self.test_node.get_attribute()
-        pass
-    #     expected_output = '4'
-    #     output = self.test_node.get_attribute()
-    #     self.assertEqual(output, expected_output)
+        output = self.test_node.get_entropies()
+        expected_output = {'bar': 0.4, 'zoo': 0.4}
+        self.assertDictEqual(output, expected_output)
+
+    def test_node_get_information_gain(self):
+        output = self.test_node.get_information_gain()
+        expected_output = {'zoo': 0.5709505944546686, 'bar': 0.5709505944546686}
+        self.assertDictEqual(output, expected_output)
