@@ -11,21 +11,25 @@
 #     for every value for the selected attribute, check for confidence
 #         if confidence for all values is 0 except 1, stop further proliferatoin
 #         else, pick the node with least entropy, repeat
+from math import log
 
 
 class Data(object):
     def __init__(self, data):
-        self.iterator = iter(data)
+        self.data = [i for i in data]
 
     def __next__(self):
-        return next(self.iterator)
+        return next(self.data)
 
     def __iter__(self):
-        return self.iterator
+        return iter(self.data)
+
+    def __len__(self):
+        return len(self.data)
 
     def get_column(self, column):
         try:
-            return [row[column] for row in self.iterator]
+            return [row[column] for row in self.data]
         except KeyError:
             raise KeyError
 
@@ -45,6 +49,11 @@ class Node(object):
         if attribute is None:
             return None
         else:
-            n =  set(self.data.get_column(attribute))
-            print(n)
+            n = set(self.data.get_column(attribute))
             return n
+
+    def get_entropy(self, outcome):
+        total_cases = len(self.data)
+        favourable_cases = len([row for row in self.data if row[self.outcome_column] == outcome])
+        pi = favourable_cases / total_cases
+        return -(pi * log(pi, 2))
